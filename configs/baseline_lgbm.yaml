@@ -1,0 +1,83 @@
+# Baseline configuration for Indigenous Rainfall Prediction
+# All paths are relative to the project root `indigenous-rainfall-prediction/`
+
+paths:
+  train_csv: data/train.csv
+  test_csv: data/test.csv
+  model_output_dir: models/baseline_lgbm
+  encoders_dir: models/baseline_lgbm/encoders
+  vectorizer_prefix: models/baseline_lgbm/tfidf_vectorizer_fold
+  feature_columns_path: models/baseline_lgbm/feature_columns.json
+  label_mapping_path: models/baseline_lgbm/label_mapping.json
+  oof_predictions_path: models/baseline_lgbm/oof_predictions.csv
+  submission_path: submissions/submission.csv
+
+columns:
+  id: ID
+  target: Target
+  group: user_id
+  datetime_columns: [time_observed, prediction_time]
+  text_columns: [indicator_description, indicator]
+  categorical_columns: [user_id, community, district, indicator]
+  numerical_columns: [confidence]
+
+preprocessing:
+  datetime_format: infer
+  timezone: null
+  text_clean:
+    lowercase: true
+    strip_punctuation: true
+    normalize_whitespace: true
+    fillna_token: "<missing>"
+
+features:
+  temporal:
+    from_datetime: time_observed
+    extract: [hour, dayofweek, month]
+  user:
+    submission_count: true
+  target_encoding:
+    smoothing: 10.0
+    handle_missing: value
+    handle_unknown: value
+  tfidf:
+    use_text_columns: [indicator_description]
+    max_features: 2000
+    ngram_range: [1, 2]
+    min_df: 3
+    max_df: 0.95
+    stop_words: english
+
+training:
+  model_type: lightgbm
+  random_seed: 42
+  n_splits: 5
+  shuffle: true
+  stratify_target: true
+  group_by: user_id
+  evaluation_metric: macro_f1
+  lightgbm_params:
+    objective: multiclass
+    metric: multi_logloss
+    num_class: 4
+    learning_rate: 0.05
+    n_estimators: 1000
+    max_depth: -1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    reg_alpha: 0.0
+    reg_lambda: 0.0
+    min_child_samples: 20
+    class_weight: null
+    random_state: 42
+    feature_fraction_seed: 42
+    bagging_seed: 42
+    data_random_seed: 42
+  early_stopping_rounds: 100
+  verbose_eval: 100
+
+output:
+  save_fold_models: true
+  save_oof_predictions: true
+  save_vectorizer: true
+  save_encoders: true

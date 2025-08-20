@@ -1,0 +1,13 @@
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.4.2
+lightgbm==4.3.0
+scipy==1.13.1
+PyYAML==6.0.1
+joblib==1.4.2
+matplotlib==3.8.4
+seaborn==0.13.2
+notebook==7.2.1
+ipykernel==6.29.5
+shap==0.45.1
+text-unidecode==1.3
