@@ -8,8 +8,8 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 
-from .preprocess import load_and_clean_data, load_label_mapping
-from .features import create_features, transform_tfidf
+from preprocess import load_and_clean_data, load_label_mapping
+from features import create_features, transform_tfidf
 
 
 def _build_feature_matrix(df_feat: pd.DataFrame,
