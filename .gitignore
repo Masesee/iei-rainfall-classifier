@@ -40,3 +40,7 @@ dist/
 # Coverage
 .coverage
 htmlcov/
+
+# Allow tracking data directory
+!data/
+!data/**
